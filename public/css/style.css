@@ -1,0 +1,27 @@
+* {
+	box-sizing: border-box;
+}
+
+.user-container {
+	height: 100vh;
+	background: url("../images/CMSCc-Logo.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.navbar.navbar-dark {
+	margin-bottom:20px;
+}
+
+.user-h1 {
+	color: white;
+}
+
+.container {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.footer.fixed-bottom {
+	background-color: #fff;
+}
