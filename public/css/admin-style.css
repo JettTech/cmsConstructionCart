@@ -15,6 +15,14 @@
 	text-align: center;
 }
 
+.thumbnailDisplayPix {
+	margin-top: 15px;
+}
+
+.noListDots {
+	list-style-type: none;
+}
+
 form {
 	text-align: left;
 	font-weight: bold;

@@ -27,7 +27,7 @@
 
   <body class="user-container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <!-- navbar-fixed-top -->
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="/">
         <img src="/images/isolatedCrane.jpg" width="30" height="30" class="d-inline-block align-top" alt="CMSCc Logo"/>
         CMSCc
       </a>
@@ -38,24 +38,25 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+        <% pages.forEach(function(page) { %>
+        <% if (page.slug === "home") { %>
           <li class="nav-item active">
-            <a class="nav-link" href="/pages">Pages <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/"><%= page.title %></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/categories">Categories</a>
+        <% } else {} %>
+          <li class="nav-item active">
+            <a class="nav-link" href="/<%= page.slug %>"><%= page.title %></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/products/">Products</a>
-          </li>
+        <% }); %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
+              Meet Us
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/pages">Pages</a>
-              <a class="dropdown-item" href="/categories">Categories</a>
+              <a class="dropdown-item" href="/about">Who We are</a>
+              <a class="dropdown-item" href="/mission">Our Company Mission</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/products/">Products</a>
+              <a class="dropdown-item" href="/contact/">Contact Us</a>
             </div>
           </li>
         </ul>

@@ -48,16 +48,26 @@ app.use(express.static(path.join(__dirname,"public")));
 app.use(fileUpload());
 
 
-//Set the global variable for the Error var in Express-Validator:
+//Set the global variable for the errors in Express-Validator:
 app.locals.errors = null;
 
 
-//DB Model Access:
-//-----------------
+//Est. Client Page DB Model Access:
+//--------------------------------------
 var Page = require("./models/page");
 
+//Route ALL (client-side) PAGES to header.ejs:
+//----------------------------------------------------
+Page.find({}).sort({sorting: 1}).exec(function (err, pages) {
+	if(err) console.log(err);
+	else {
+		//to display the projects in the clinet header...
+		app.locals.pages = pages;
+	}
+});
 
 //Make all pages pass into Header.ejs (app.locals.pages):
+//---------------------------------------------------------------
 Page.find({}).sort({sorting:1}).exec(function (err, pages) {
 	if(err) {
 		console.log(err);

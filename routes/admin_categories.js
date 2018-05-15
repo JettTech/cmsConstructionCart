@@ -185,6 +185,8 @@ router.post("/edit-category/:id", function(req, res) {
 	var slug = title.trim().replace(/\s+/g, "-").toLowerCase();
 
 	console.log("\n");
+	console.log("this is your NEW Category id:");
+	console.log(id);
 	console.log("this is your NEW CATEGORY title:");
 	console.log(title);
 	console.log("this is your NEW CATEGORY slug:");

@@ -88,17 +88,23 @@ router.get("/edit-product/:id", function(req, res) {
 				return console.log(err);
 			}
 			else {
-				var galleryDir = "public/product_images/" + p._id + "/gallery";
-				var galleryImages = mull;
+				var galleryDir = "public/product_images/" + product._id + "/gallery";
+				var galleryImages = null;
 
 				fs.readdir(galleryDir, function(err,  files) {
 					if (err) {
+						console.log("you have an error");
 						console.log(err)
+						res.redirect("/admin/products");
 					}
 					else {
+						console.log("Inside the get render, you passed the err test...")
+						console.log("Below are the files : ");
+						console.log(files);
 						galleryImages = files;
 
-						res.render("admin/edit_product", {
+						//navigating from the views folder, as the default engine is set to ejs.
+						res.render("admin/edit-product", {
 							errors: errors,
 							id: product._id,
 							title: product.title.replace(/\-+/g, " "),
@@ -121,25 +127,48 @@ router.get("/edit-product/:id", function(req, res) {
 //--------------------------------
 //This route is refering to the "/admin/products/add-product" ..as this part is the root file listed in the app.js file.
 router.get("/view-product/:id", function(req, res) {
-	Product.findById(req.params.id, function(err, product) {
+	var id = req.params.id
+
+	Product.findById(id, function(err, product) {
 		if(err) {
 			return console.log(err);
 		}
-		var title = "";
-		var description = "";
-		var price = "";
-		var image = "";
+		else {
+			var title = "";
+			var description = "";
+			var price = "";
+			var image = "";
+			var galleryDir = "public/product_images/" + product._id + "/gallery";
+			var galleryImages = null;
 
-		Category.find(function (err, category) {
-			res.render("admin/view-product", {
-				id: product._id,
-				title: product.title.replace(/\-+/g, " "),
-				description: product.description,
-				category: product.category,
-				price: product.price,
-				image: product.image
+			fs.readdir(galleryDir, function(err,  files) {
+				if (err) {
+					console.log("you have an error");
+					console.log(err)
+					res.redirect("/admin/view-product/" + id);
+				}
+				else {
+					console.log("Inside the get render, you passed the err test...")
+					console.log("Below are the files : ");
+					console.log(files);
+					galleryImages = files;
+
+						
+					Category.find(function (err, category) {
+						res.render("admin/view-product", {
+							id: product._id,
+							title: product.title.replace(/\-+/g, " "),
+							description: product.description,
+							category: product.category,
+							price: product.price,
+							galleryImages: galleryImages,
+							image: product.image
+
+						});
+					});
+				}
 			});
-		});
+		}
 	});
 });
 
@@ -148,17 +177,47 @@ router.get("/view-product/:id", function(req, res) {
 //-------------------------------------------------
 //This route is refering to the "/admin/products/delete-product" ..as this part is the root file listed in the app.js file.
 router.get("/delete-product/:id", function(req, res) {
-	//FYI: WE NEVER REDIRECT from the current (default) "/admin/products product, as we are only updating
-	//the dateabase with the exisitance of a document or not (and thus how maany/what docs ot display
-	//on the current product or not)...
+	var id = req.params.id;
+	var path = "public/product_images/" + id;
 
-	Product.findByIdAndRemove(req.params.id, function(err) {
-		if(err) {
-			return console.log(err);
+	//first remove the product image folder...
+	fs.remove(path, function(err) {
+		if (err) return console.log(err);
+		else {
+			//... THEN delete the product tiem from the Product Model in Mongo(ose) DB:
+			Product.findByIdAndRemove(req.params.id, function(err) {
+				if(err) {
+					return console.log(err);
+				}
+				req.flash("success", "The product was successfully deleted.");
+				res.redirect("/admin/products");
+
+			});
 		}
-		req.flash("success", "The product was successfully deleted.");
-		res.redirect("/admin/products");
+	})
+});
 
+//7.) To Get Delete gallery-Image Products >> Delete a Product:
+//-------------------------------------------------
+//This route is refering to the "/admin/products/delete-image/:image/?id" ..as this part is the root file listed in the app.js file.
+router.get("/delete-image/:image", function(req, res) {
+	var originalImage = "/public/product_images/" + req.query.id + "/gallery/" + req.params.image;
+	var thumbnailImage = "public/product_images/" + req.query._id + "/gallery/thumbnails/" + req.params.image;
+
+	fs.remove(originalImage, function(err) {
+		if(err) {
+			console.log(err);
+		}
+		else {
+			fs.remove(thumbnailImage, function(err) {
+				if (err) return console.log(err);
+				else {
+					req.flash("success", "Gallery image was successfully deleted.");
+					//redirect to url:
+					req.redirect("/admin/products/edit-product/" + req.query.id);
+				}
+			});
+		}
 	});
 });
 
@@ -171,7 +230,7 @@ router.get("/delete-product/:id", function(req, res) {
 //This route is refering to the "/admin/products/add-product" ..as this part is the root file listed in the app.js file.
 router.post("/add-product", function(req, res) {
 	// all the files uploaded are inside the "req.file" because each of the files are uploaded in a ".file" package with the "express-fileupload" dependancy.
-	var imageFile = typeof req.files.image !== undefined ? req.files.image.name : "";
+	var imageFile = typeof req.files.image !== "undefined" ? req.files.image.name : "";
 
 	//validate with the express-validator dependency:
 	req.checkBody("title", "Title must have a value.").notEmpty();
@@ -225,7 +284,7 @@ router.post("/add-product", function(req, res) {
 		});
 	}
 	else {
-		console.log("You have submitted your values for the DB.... !!");
+		console.log("You have submitted your values for the DB...");
 		//Format: Product.findOne({"CollectionName":"File Var", ie.Slug})
 		Product.findOne({title:title}, function (err, product) {
 			if (product) {
@@ -242,6 +301,7 @@ router.post("/add-product", function(req, res) {
 				});
 			}
 			else {
+				console.log("You have entered your values for the DB... !!");
 				var priceFixed = parseFloat(price).toFixed(2);
 
 				var product = new Product({
@@ -281,7 +341,7 @@ router.post("/add-product", function(req, res) {
 
 									productImage.mv(path, function(err) {	
 										return console.log("Error after the productImage.mv() func., error3 : " + err);
-									})
+									});
 								}
 							}
 						});
@@ -295,7 +355,32 @@ router.post("/add-product", function(req, res) {
 
 });
 
-//2.) To POST the Re-Ordered Product list (while on the admin/products site) in the DB:
+//2.) To POST the product gallery into the DB:
+//-------------------------------------------------------------------------------
+// "/admin/products/product-gallery/<%= id"
+router.post('/product-gallery/:id', function (req, res) {
+
+    var productImage = req.files.file;
+    var id = req.params.id;
+    var path = 'public/product_images/' + id + '/gallery/' + req.files.file.name;
+    var thumbnailsPath = 'public/product_images/' + id + '/gallery/thumbnails/' + req.files.file.name;
+    
+    //creating the gallery copy of the image
+    productImage.mv(path, function (err) {
+        if (err)
+            console.log(err);
+        //resizing the image as a thumbnail and place into the thumbanil folder as the thumbnail copy
+        resizeImg(fs.readFileSync(path), {width: 500, height: 500})
+        .then(function (buffer) {
+            fs.writeFileSync(thumbnailsPath, buffer);
+        });
+    });
+
+    req.flash("success", "Gallery content added.");
+	res.redirect("/admin/products");
+});
+
+//3.) To POST the Re-Ordered Product list (while on the admin/products site) in the DB:
 //-------------------------------------------------------------------------------
 //This route is refering to the "/admin/products/reorder-products" ..as this part is the root file listed in the app.js file.
 router.post("/reorder-products", function(req, res) {
@@ -322,7 +407,7 @@ router.post("/reorder-products", function(req, res) {
 //This route is refering to the "/admin/products/edit-product/:slug" ..as this part is the root file listed in the app.js file.
 router.post("/edit-product/:id", function(req, res) {
 	// all the files uploaded are inside the "req.file" because each of the files are uploaded in a ".file" package with the "express-fileupload" dependancy.
-	var imageFile = typeof req.files.image !== undefined ? req.files.image.name : "";
+	var imageFile = typeof req.files.image !== "undefined" ? req.files.image.name : "";
 
 	//validate with the express-validator dependency:
 	req.checkBody("title", "Title must have a value.").notEmpty();
@@ -331,7 +416,7 @@ router.post("/edit-product/:id", function(req, res) {
 	req.checkBody("image", "Image must have a value.").isImage(imageFile);
 
 	//using body-parser depencdy to parse and determine the "body" variable here:
-	var id = req.params.id;
+	var id = req.params.id.slice(1);
 	var title = req.body.title.trim().replace(/\s+/g, "-").toLowerCase();
 	var slug = title.trim().replace(/\s+/g, "-").toLowerCase();
 	var description = req.body.description.trim();
@@ -341,112 +426,107 @@ router.post("/edit-product/:id", function(req, res) {
 
 
 	console.log("\n");
-	console.log("this is your Product title:");
+	console.log("this is your req.files object:");
+	console.log(req.files);
+	console.log("this is your new Product id:");
+	console.log(id);
+	console.log("this is your new Product title:");
 	console.log(title);
-	console.log("this is your Product description:");
+	console.log("this is your new Product description:");
 	console.log(description);
-	console.log("this is your Product price:");
+	console.log("this is your new Product price:");
 	console.log(price);
+	console.log("this is your Previous Product Image:");
+	console.log(pImage);
+	console.log("this is your NEW Product Image:");
+	console.log(imageFile);
 	console.log("\n");
 
 	var errors = req.validationErrors();
 	if (errors) {
 		console.log("You have an error");
 		console.log(errors);
-
 		req.session.errors = errors;
-		Category.find(function (err, categories) {
-			res.render("admin/add_product", {
-				errors: errors,
-				title: title,
-				description: description,
-				price: price,
-				categories: categories
-			});
-		});
+		res.redirect("/admin/products/edit-product" + id);
 	}
 	else if (category === "Please Select a Category Below") {
 		req.flash ("danger", "You must choose a Category.");
-		Category.find(function (err, categories) {
-			res.render("admin/add_product", {
-				title: title,
-				description: description,
-				categories: categories,
-				price: price,
-				image: image
-			});
-		});
+		res.redirect("/admin/products/edit-product" + id);
 	}
 	else {
 		console.log("You have submitted your values for the DB.... !!");
 		//Format: Product.findOne({"CollectionName":"File Var", ie.Slug})
-		Product.findOne({title:title, _id:{"$ne":id}}, function (err, product) {
+		Product.findOne({title:title, _id: {"$ne":id}}, function (err, product) {
 			if (err) {
 				console.log(err);
 			}
 			else if (product) {
 				//"flash" refers to the express-messages:
 				req.flash ("danger", "This Product Title already exists. Please choose another.");
-				Category.find(function (err, categories) {
-					res.render("admin/add_product", {
-						title: title,
-						description: description,
-						categories: categories,
-						price: price,
-						image: image
-					});
-				});
+				res.redirect("/admin/products/edit-product" + id);
 			}
 			else {
+				console.log("You have entered your values for the DB.... !!");
 				var priceFixed = parseFloat(price).toFixed(2);
 
-				Product.findById(id, function(err, category) {
+				Product.findById(id, function(err, product) {
 					if (err) {
 						return console.log();
 					}
 
-					prod...
+					product.title = title;
+					product.slug = slug;
+					product.description = description;
+					product.price = priceFixed;
+					product.category = category;					
+					if (imageFile !== "") {
+						product.image = imageFile;
+					}
+					else {
+						product.image = pImage;
+					}
+
+					console.log("this is the value of product, product.image, and pImage (previous prod. Image): ");
+					console.log(product);
+					console.log(product.image);
+					console.log(pImage);
 
 					product.save(function(err) {
 						if (err) {
 							return console.log(err);
 						}
-
-						if(imageFile !-- "") {
+						else if (imageFile !== "") {
+							console.log("inside of the fs INNERWORKING");
+							//verifies existance of current product image file, and removes it, to prepare for new product image file choice.
 							if(pImage !== "") {
-								fs.remove("public/product_images/" + id)
+								console.log("inside of the pImage (old image) deletion case");
+								var oldPath = "public/product_images/" + id + "/" + pImage;
+
+								fs.remove(oldPath, function(err) {
+									console.log("pImage === : ");
+									console.log(pImage);
+
+									if (err) return console.error(err);
+									console.log('success!');
+								});
 							}
-						}
-						//as soon as save (above occurs), the mongoose _id is available, se it is possible to create the below url.
-						mkdirp("public/product_images/" + product._id, function(err) {
-							return console.log(err);
-						});
 
-						mkdirp("public/product_images/" + product._id + "/gallery", function(err) {
-							return console.log(err);
-						});
+							var productImage = req.files.image; //var productImage === imageFile
+							var path = "public/product_images/" + id + "/" + imageFile;
 
-						mkdirp("public/product_images/" + product._id + "/gallery/thumbnails", function(err) {
-							return console.log(err);
-						});
-
-						if (image !== "") { //say "imageFile" instead?
-							var productImage = req.files.image;
-							var path = "public/product_image/" + product._id + "/gallery/thumbnails/"; // + image; // use "imageFile" instead?
-
-							productImage.mv(path, function(err) {	
+							productImage.mv(path, function(err) {
+								console.log("this is the err (null === no err) : ");
 								return console.log(err);
-							})
-						}					
+							});
+						}
 
-						req.flash("success", "Product added!");
-						res.redirect("/admin/products");
+						req.flash("success", "Product edited!");
+						res.redirect("/admin/products/edit-product/" + id);											
 					});
 				});
 			}
 		});
 	}
 });
-
 
 module.exports = router;

@@ -51,6 +51,25 @@
 					<img id="productImgPreview" width="550" height="500" src="/product_images/<%= id %>/<%= image %>" alt="Product Image">
 				<% } %>
 			</div>
+			<div>
+				<br/>
+				<hr/>
+				<h2 class="page-header text-center">Image Gallery</h2>
+				<ul class="gallery noListDots d-flex justify-content-left flex-wrap">
+					<% galleryImages.forEach(function(image) { %>
+						<% if (image !== "thumbnails") { %>
+						<br/>
+						<br/>
+						<li class="thumbnailDisplayPix">
+							<img width="150" height="100" class="flex" src="/product_images/<%= id %>/gallery/thumbnails/<%= image %>" alt="Product Image">
+							&nbsp;
+							<br/>
+							<a class="confirmDeletion" href="/admin/products/delete-image/<%= image %>/?id=<%= id %>">delete</a>
+						</li>
+						<% } %>
+					<% }); %>
+				</ul>
+			</div>
 		</div>			
 	</div>
 </div>

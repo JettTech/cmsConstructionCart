@@ -191,6 +191,7 @@ router.post("/reorder-pages", function(req, res) {
 			});
 		})(count); //ending for closure
 	}
+
 });
 
 //4.) To POST the UPDATE the Edited Pages to DB:
