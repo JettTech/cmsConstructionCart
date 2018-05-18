@@ -83,6 +83,15 @@ router.get("/delete-page/:id", function(req, res) {
 			return console.log(err);
 		}
 
+		Page.find({}).sort({sorting: 1}).exec(function(err, pages) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				req.app.locals.pages = pages;
+			}
+		});
+
 		req.flash("success", "The page was successfully deleted.");
 		res.redirect("/admin/pages");
 
@@ -162,6 +171,15 @@ router.post("/add-page", function(req, res) {
 						return console.log(err);
 					}
 
+					Page.find({}).sort({sorting: 1}).exec(function(err, pages) {
+						if (err) {
+							console.log(err)
+						}
+						else {
+							req.app.locals.pages = pages;
+						}
+					});
+
 					req.flash("success", "Page added!");
 					res.redirect("/admin/pages");
 				});
@@ -173,9 +191,8 @@ router.post("/add-page", function(req, res) {
 
 //2.) To POST the Re-Ordered Page list (while on the admin/pageges site) in the DB:
 //-------------------------------------------------------------------------------
-//This route is refering to the "/admin/pages/reorder-pages" ..as this part is the root file listed in the app.js file.
-router.post("/reorder-pages", function(req, res) {
-	var ids = req.body["id[]"];
+//sort pages Function >> to control the order of the function calls and execution... we need the page reorder to occur first and then(SECONDLY) the page sorting/rendering onto the client site.
+function sortPages(ids, callback) {
 	var count = 0;
 
 	for (var i = 0; i < ids.length; i++) {
@@ -187,11 +204,29 @@ router.post("/reorder-pages", function(req, res) {
 				page.sorting = count;
 				page.save(function(err) {
 					if(err) return console.log(err);
+					count++;
+					if (count >= ids.length) {
+						callback(); //in this scenario, all of the ids (all the pages therefore), have been processed/interated over...
+					}
 				});
 			});
 		})(count); //ending for closure
 	}
+};
+//This route is refering to the "/admin/pages/reorder-pages" ..as this part is the root file listed in the app.js file.
+router.post("/reorder-pages", function(req, res) {
+	var ids = req.body["id[]"];
 
+	sortPages(ids, function() {
+		Page.find({}).sort({sorting: 1}).exec(function (err, pages) {
+			if(err) {
+				console.log(err);
+			}
+			else {
+				req.app.locals.pages = pages;
+			}
+		});
+	});
 });
 
 //4.) To POST the UPDATE the Edited Pages to DB:
@@ -288,6 +323,16 @@ router.post("/edit-page/:id", function(req, res) {
 						if (err) {
 							return console.log(err);
 						}
+
+						Page.find({}).sort({sorting: 1}).exec(function(err, pages) {
+							if (err) {
+								console.log(err)
+							}
+							else {
+								req.app.locals.pages = pages;
+							}
+						});
+
 						req.flash("success", "The page was successfully edited.");
 						res.redirect("/admin/pages/edit-page/" + id );
 					});

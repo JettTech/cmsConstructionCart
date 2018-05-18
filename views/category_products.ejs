@@ -1,0 +1,20 @@
+<% include _layouts/header %>
+
+<br/>
+<div class="col-xs-12 col-md-9">
+	<div class="row products d-flex justify-content-left flex-wrap">
+	    <% products.forEach(function(product){ %>
+	        <div class="flex productDiv">
+	            <a class="productArea " href="/products/<%= product.category %>/<%= product.slug %>">
+	                <img class="productImage" src="/product_images/<%= product.id %>/<%= product.image %>" alt="">
+	            </a>
+	            <h5 class="capitalize-text text-white"><%= product.title.replace(/\-+/g, " ") %></h5>
+	            <h6 class="text-white">$<%= parseFloat(product.price).toFixed(2) %></h6>
+	            <a class="viewDetails text-white" href="/products/<%= product.category %>/<%= product.slug %>"><h6>View Details</h6></a>
+	        </div>
+	    <% }); %>
+	</div>
+</div>
+</div> <!-- closes the opening div from the side nav column/header -->
+
+<% include _layouts/footer %>

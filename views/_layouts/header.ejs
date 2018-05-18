@@ -11,6 +11,8 @@
     <link rel="icon" type="text/css" href="/images/isolatedCrane.jpg">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- FancyBox StyleSheet CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.20/jquery/fancybox.min.css">
     <!-- Local CSS -->
     <link rel="stylesheet" type="text/css" href="/css/style.css">
    
@@ -23,6 +25,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <!-- CKEditor JS -->
     <script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
+    <!-- Local CSS -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.20/jquery/fancybox.min.js"></script> 
+    <!-- Main (local js) JS -->
+    <script type="text/javascript" src="/js/main.js"></script>
   </head>
 
   <body class="user-container">
@@ -41,12 +47,14 @@
         <% pages.forEach(function(page) { %>
         <% if (page.slug === "home") { %>
           <li class="nav-item active">
-            <a class="nav-link" href="/"><%= page.title %></a>
+            <a class="nav-link capitalize-text" href="/"><%= page.title.replace(/\-+/g, " ") %></a>
           </li>
-        <% } else {} %>
+        <% } else { %>
           <li class="nav-item active">
-            <a class="nav-link" href="/<%= page.slug %>"><%= page.title %></a>
+            <!-- page slug === categorySlug link -->
+            <a class="nav-link capitalize-text" href="/<%= page.slug %>"><%= page.title.replace(/\-+/g, " ") %></a>
           </li>
+        <% } %>  
         <% }); %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,8 +68,43 @@
             </div>
           </li>
         </ul>
+        <ul navbar-nav navbar-right>
+          <li>
+            <a href="/cart/checkout">My Cart
+              <% if (typeof cart !== "undefined") { %>
+                 <% cart.length %> 
+                 <% } else { %>
+                 items: 0
+               <% } %>  
+            </a>
+          </li>
+        </ul>
       </div>
     </nav>
 
-    <div class="container text-center justify-content-center">
+    <div class="container-fluid text-center justify-content-center">
       <h1> <%- messages("messages", locals) %></h1>
+
+      <div class="row justify-content-center">
+        <h1 class="user-h1 col-xs-12">Welcome to CMS Construction.Co</h1>
+      </div>
+      <br/>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-3">
+          <h3 class="text-white">Categories</h3>
+
+          <ul class="list-group">
+            <li class="list-group-item">
+              <a href="/products">All Products</a>
+            </li>
+
+            <% categories.forEach(function(category) { %>
+            <li class="list-group-item">
+              <a class="capitalize-text" href="/products/<%= category.slug %>"><%= category.title.replace(/\-+/g, " ") %></a>
+            </li>
+            <% }); %>
+          </ul>
+        </div>
+<!--         <div class="col-xs-12"></div>
+        <div class="col-xs-12 col-md-8 offset-col-md-3"></div> -->

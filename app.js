@@ -55,18 +55,10 @@ app.locals.errors = null;
 //Est. Client Page DB Model Access:
 //--------------------------------------
 var Page = require("./models/page");
+var Category = require("./models/category");
+var Product = require("./models/product");
 
-//Route ALL (client-side) PAGES to header.ejs:
-//----------------------------------------------------
-Page.find({}).sort({sorting: 1}).exec(function (err, pages) {
-	if(err) console.log(err);
-	else {
-		//to display the projects in the clinet header...
-		app.locals.pages = pages;
-	}
-});
-
-//Make all pages pass into Header.ejs (app.locals.pages):
+//Make all (client-side) PAGES pass into Header.ejs (app.locals.pages):
 //---------------------------------------------------------------
 Page.find({}).sort({sorting:1}).exec(function (err, pages) {
 	if(err) {
@@ -77,6 +69,16 @@ Page.find({}).sort({sorting:1}).exec(function (err, pages) {
 	}
 });
 
+//Make all (client-side) CATEGORIES pass into Header.ejs (app.locals.pages):
+//---------------------------------------------------------------
+Category.find(function (err, categories) {
+	if(err) {
+		console.log(err);
+	}
+	else {
+		app.locals.categories = categories;
+	}
+});
 
 //Body Parser Middleware:
 //------------------------------------------------
@@ -145,6 +147,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.get("*", function(req, res, next) {
+	res.locals.cart = req.session.cart;
+	next();
+})
+
 
 //Route Relay:
 //------------------------------------------------
@@ -159,6 +166,12 @@ app.get("/admin", function(req, res) {
 	res.redirect("/admin/pages");
 });
 app.use("/admin/pages", adminPages);
+
+var products = require("./routes/products.js");
+app.use("/products", products);
+
+var cart = require("./routes/cart.js");
+app.use("/cart", cart);
 
 var pages = require("./routes/pages.js");
 app.use("/", pages);

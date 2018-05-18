@@ -18,6 +18,10 @@ $(document).ready(function() {
 		if(!confirm("Are you sure you wish to delete this?")) return false;
 	});
 
+	if ($("data.fancybox").length) {
+		$("data-fancbox").fancybox();
+	}
+
 	//CkEditor enabler, for both the Edit-page and Add-page Text-Area enhancers
 	if ($("textarea#text-area").length) {
 		//replace the textarea elemnt with the CKEditor, by reference to ID (no need to include the "#" symbol).
