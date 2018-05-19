@@ -3,6 +3,8 @@
 var express = require("express");
 var router = express.Router();
 var fs = require("fs-extra");
+var auth = require("../config/auth");
+var isUser = auth.isUser;
 
 // Get DB Models
 var Product = require("../models/product");
@@ -11,6 +13,8 @@ var Category = require("../models/category");
 // ROUTE LOGIC
 //=========================
 //GET the products dashborad product...
+
+// router.get("/", isUser, function(req, res) { >>> WOULD USE this ALTERNATIVE routing to require only LOGGEDIN USERS to access this route/page
 router.get("/", function(req, res) {
     Product.find(function (err, products) {
         if (err)

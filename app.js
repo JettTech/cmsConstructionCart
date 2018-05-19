@@ -12,6 +12,8 @@ var fileUpload = require("express-fileupload");
 var mkdirp = require("mkdirp");
 var fs = require("fs-extra");
 var resizeImg = require("resize-img");
+var passport = require("passport");
+require("./config/passport")(passport);
 
 //Local Files to Acess:
 //-----------------------
@@ -147,8 +149,14 @@ app.use(function (req, res, next) {
     next();
 });
 
+// Passport Middleware:
+//------------------------------------------------
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get("*", function(req, res, next) {
 	res.locals.cart = req.session.cart;
+	res.locals.user = req.user || null; //if user is logged in, we have access, otherwise the user === null
 	next();
 })
 
@@ -169,6 +177,9 @@ app.use("/admin/pages", adminPages);
 
 var products = require("./routes/products.js");
 app.use("/products", products);
+
+var users = require("./routes/users.js");
+app.use("/users", users);
 
 var cart = require("./routes/cart.js");
 app.use("/cart", cart);

@@ -12,7 +12,7 @@ var Product = require("../models/product");
 
 // ROUTE LOGIC
 //=========================
-//GET the page that ADDS PRODUCTS to the cart form
+//GET the page that ADDS PRODUCTS to the cart form ; ie" "cart/add/:product;"
 router.get("/add/:product", function(req, res) {
 	var slug = req.params.product;
 
@@ -59,7 +59,7 @@ router.get("/add/:product", function(req, res) {
 	});
 });
 
-//GET the page for the CART Checkout
+//GET the page for the CART Checkout; ie" "cart/checkout"
 router.get("/checkout", function(req, res) {
 	if(req.session.cart && req.session.cart.length === 0) {
 		delete req.session.cart;
@@ -73,7 +73,7 @@ router.get("/checkout", function(req, res) {
 	}
 });
 
-//GET the page for the PRODUCT UPDATE
+//GET the page for the PRODUCT UPDATE; ie" "cart/updated/:product"
 router.get("/udpate/:product", function(req, res) {
 	var slug = req.params.product;
 	var cart = req.session.cart;
@@ -116,11 +116,26 @@ router.get("/udpate/:product", function(req, res) {
 	});
 });
 
-//GET the CLEAR CART page
-router.get("/cart/clear", function(req, res) {
+//GET the CLEAR CART page; ie" "cart/clear;"
+router.get("/clear", function(req, res) {
 	var slug = req.params.product;
 
+	delete req.session.cart;
 
+	console.log(req.session.cart);
+	req.flash("success", "Cart cleared!");
+	res.redirect("/cart/checkout");
 });
+
+
+//GET the CLEAR CART page; ie" "cart/clear;"
+router.get("/buynow", function(req, res) {
+	delete req.session.cart;
+
+	console.log("req.session.cart  = ");
+	console.log(req.session.cart);
+	res.sendStaut(200);
+});
+
 
 module.exports = router;

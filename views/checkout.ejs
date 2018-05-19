@@ -40,15 +40,44 @@
 		</tr>
 		<tr>
 			<td colspan="5" align="right">
-				<a class="btn btn-danger clearCart" href="/cart/clear">Clear cart</a>
+				<a class="btn btn-danger cart-deletion" href="/cart/clear">Clear cart</a>
 			</td>
 			<td colspan="5" align="right">
-				<a class="btn btn-primary buyNow" href="#">Buy now</a>
+				<a class="btn btn-primary buy-now" href="#">Buy now</a>
 			</td>
 		</tr>
 	</table>
+	
+	<form class="payPal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+		<input type="hidden" name="cmd" value="_cart">
+		<input type="hidden" name="upload" value="1">
+		<input type="hidden" name="business" value="jultranet-facilitator@gmail.com">
+		<% var num = 0; %>
+		<% cart.forEach(function(p) { %>
+			<% num++ %>			
+			<input type="hidden" name="item_name_<%= num %>" value="<% product.title %>">
+			<input type="hidden" name="amount_<%= num %>" value="<% product.price %>">
+			<input type="hidden" name="quantity_<%= num %>" value="<%= product.qty %>">
+		<% }); %>
+		<input type="hidden" name="currency_code" value="USD">
+		<input type="hidden" name="amount" value="<%= total %>">
+		<input type="submit" value="PayPal">
+	</form>
+
 <% } else { %>
 	<h3 class="text-center">Your cart is empty.</h3>
 <% } %>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	//"Buy Now "  functionality
+	$(".buy-now").on("click", function(e) {
+		e.preventDefault();
+		$.get("/cart/buynow", function() {
+			$("form.payPal input[type=image]").click();
+			$(".ajaxbg").show();
+		})
+	});
+</script>
 
 <% include _layouts/footer %>

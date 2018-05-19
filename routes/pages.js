@@ -3,6 +3,7 @@
 var express = require("express");
 var router = express.Router();
 
+// Get DB Page Model:
 var Page = require("../models/page");
 
 // ROUTE LOGIC
@@ -45,22 +46,6 @@ router.get("/pages/:slug", function(req, res) {
 		}
 	});
 });
-
-
-//GET
-router.get("/pages/:id/", function(req, res) {
-	res.render("index", {
-		title: "CMS Construction.Co"
-	})//;
-});
-
-router.get("/pages", function(req, res) {
-	res.render("index", {
-		title: "CMS Construction.Co"
-	})//;
-});
-
-
 
 router.get("/pages/test", function(req, res) {
 	res.send("This is the testing area...");

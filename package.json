@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/JettTech/cmsConstructionCart#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",
     "ejs": "^2.5.9",
@@ -32,6 +33,8 @@
     "mkdirp": "^0.5.1",
     "mongoose": "^5.0.15",
     "mongoose-unique-validator": "^2.0.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "resize-img": "^1.1.2"
   }
 }
