@@ -76,7 +76,7 @@
           </li>
         </ul>
         <ul navbar-nav navbar-right>
-          <% if (user && user.admin == 1) { %>
+          <% if (user && user.admin === 1) { %>
             <li>Hello <%= user.username %> (Admin).</li>
             <li href="/admin/pages">Admin Area</li>
             <li>
@@ -90,7 +90,7 @@
             </li>
             <li href="/users/logout">Log Out</li>
           <% } %> 
-          <% else if (user) { %>
+          <% if (user) { %>
             <li>Hi, <%= user.username %>!</li>
             <li>
               <a href="/cart/checkout">My Cart
