@@ -8,11 +8,13 @@
     <meta name="author" content=""/> -->
 
     <title><%= title %></title>
-    <link rel="icon" type="text/css" href="/images/isolatedCrane.jpg">
+    <link rel="icon" type="text/css" href="/images/icon.jpg">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!-- FancyBox StyleSheet CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.20/jquery/fancybox.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css">
+    <!-- GoogleFonts CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Exo+2|Quicksand" rel="stylesheet">
     <!-- Local CSS -->
     <link rel="stylesheet" type="text/css" href="/css/style.css">
    
@@ -25,13 +27,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <!-- CKEditor JS -->
     <script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
-    <!-- Local CSS -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.20/jquery/fancybox.min.js"></script> 
+    <!-- Fancybox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
     <!-- Main (local js) JS -->
     <script type="text/javascript" src="/js/main.js"></script>
   </head>
 
-  <body class="user-container">
+  <body>
     <div class="ajaxbg">
       <div class="ajaxinner">
         <h3>You are now being redirected to Paypal Checkout...</h3>
@@ -40,8 +42,8 @@
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <!-- navbar-fixed-top -->
-      <a class="navbar-brand" href="/">
-        <img src="/images/isolatedCrane.jpg" width="30" height="30" class="d-inline-block align-top" alt="CMSCc Logo"/>
+      <a id="logo-name" class="navbar-brand" href="/">
+        <img src="/images/icon.jpg" width="30" height="30" class="d-inline-block align-top" alt="CMSCc Logo"/>
         CMSCc
       </a>
       
@@ -54,33 +56,22 @@
         <% pages.forEach(function(page) { %>
         <% if (page.slug === "home") { %>
           <li class="nav-item active">
-            <a class="nav-link capitalize-text" href="/"><%= page.title.replace(/\-+/g, " ") %></a>
+            <a class="nav-link capitalize-text" href="/pages/"><%= page.title.replace(/\-+/g, " ") %></a>
           </li>
         <% } else { %>
           <li class="nav-item active">
             <!-- page slug === categorySlug link -->
-            <a class="nav-link capitalize-text" href="/<%= page.slug %>"><%= page.title.replace(/\-+/g, " ") %></a>
+            <a class="nav-link capitalize-text" href="/pages/<%= page.slug %>"><%= page.title.replace(/\-+/g, " ") %></a>
           </li>
         <% } %>  
         <% }); %>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Meet Us
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/about">Who We are</a>
-              <a class="dropdown-item" href="/mission">Our Company Mission</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/contact/">Contact Us</a>
-            </div>
-          </li>
         </ul>
-        <ul navbar-nav navbar-right>
+        <ul class="text-center text-white navbar-nav navbar-right" style="margin-right: 20px;">
           <% if (user && user.admin === 1) { %>
             <li>Hello <%= user.username %> (Admin).</li>
             <li href="/admin/pages">Admin Area</li>
             <li>
-              <a href="/cart/checkout">My Cart
+              <a href="/cart/checkout">My Cart 
                 <% if (typeof cart !== "undefined") { %>
                    <% cart.length %> 
                    <% } else { %>
@@ -93,24 +84,24 @@
           <% if (user) { %>
             <li>Hi, <%= user.username %>!</li>
             <li>
-              <a href="/cart/checkout">My Cart
+              <a href="/cart/checkout">My Cart 
                 <% if (typeof cart !== "undefined") { %>
                    <% cart.length %> 
                    <% } else { %>
-                   items: 0
+                   (0)
                  <% } %>  
               </a>
             </li>
-            <li href="/users/logout">Log Out</li>
+            <li><a href="/users/logout">Log Out</a></li>
           <% } else { %> 
-            <li href="/users/register">Register</li>
-            <li href="/users/login">Log In</li>
+            <li><a href="/users/register" style="margin-right: 20px;">Register</a></li>
+            <li><a href="/users/login">Log in</a></li>
           <% } %> 
         </ul>
       </div>
     </nav>
 
-    <div class="container-fluid text-center justify-content-center">
+    <div class="user-container container-fluid text-center justify-content-center">
       <%- messages("messages", locals) %>
 
       <% if (errors) {%>
@@ -120,27 +111,3 @@
           </div>
           <% });%>
       <% }%>
-      
-      <div class="row justify-content-center">
-        <h1 class="user-h1 col-xs-12">Welcome to CMS Construction.Co</h1>
-      </div>
-      <br/>
-
-      <div class="row">
-        <div class="col-xs-12 col-sm-3">
-          <h3 class="text-white">Categories</h3>
-
-          <ul class="list-group">
-            <li class="list-group-item">
-              <a href="/products">All Products</a>
-            </li>
-
-            <% categories.forEach(function(category) { %>
-            <li class="list-group-item">
-              <a class="capitalize-text" href="/products/<%= category.slug %>"><%= category.title.replace(/\-+/g, " ") %></a>
-            </li>
-            <% }); %>
-          </ul>
-        </div>
-<!--         <div class="col-xs-12"></div>
-        <div class="col-xs-12 col-md-8 offset-col-md-3"></div> -->

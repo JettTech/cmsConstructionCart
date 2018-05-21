@@ -18,9 +18,9 @@ router.get("/pages", function(req, res) {
 		if(err) {
 			console.log(err);
 		}
-		res.render("index", {
+		res.render("homeIndex", {
 			title: "CMS Construction.Co",
-			content: ""
+			content: page.content
 		});
 	});
 });

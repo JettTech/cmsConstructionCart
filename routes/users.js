@@ -68,7 +68,7 @@ router.post("/register", function(req, res) {
 		});
 	}
 	else{
-		user.findOne({username: username}, function(err, user){
+		User.findOne({username: username}, function(err, user){
 			if (err) console.log(err);
 
 			if (user) {
