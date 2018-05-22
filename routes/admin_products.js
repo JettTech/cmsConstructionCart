@@ -26,11 +26,16 @@ var Category = require("../models/category");
 //1.) To Get Admin Product Index:
 //------------------------
 //This route is refering to the "/admin/products/" ..as this part is the root file listed in the app.js file.
-router.get("/", isAdmin, function(req, res) {
+router.get("/", function(req, res) {
 	var count;
 
 	Product.count(function(req, countResult) {
 		count = countResult;
+		console.log("\n")
+		console.log("\n")
+		console.log("This is the Count Result from the DB, which determines if there are products/services to display on the 'All Products' page... ");
+		console.log(count);
+		console.log("\n")
 	});
 
 	// res.send("This is the Admin Product Area");
@@ -54,7 +59,7 @@ router.get("/test", function(req, res) {
 //3.) To Get Admin Product >> Add Product:
 //--------------------------------
 //This route is refering to the "/admin/products/add-product" ..as this part is the root file listed in the app.js file.
-router.get("/add-product", isAdmin, function(req, res) {
+router.get("/add-product", function(req, res) {
 	var title = "";
 	var description = "";
 	var price = "";
@@ -72,7 +77,7 @@ router.get("/add-product", isAdmin, function(req, res) {
 //4.) To Get Edit-Product Products >> Edit a product-for Admin Views:
 //--------------------------------
 //This route is refering to the "/admin/products/add-product" ..as this part is the root file listed in the app.js file.
-router.get("/edit-product/:id", isAdmin, function(req, res) {
+router.get("/edit-product/:id", function(req, res) {
 	var errors;
 	var title = "";
 	var description = "";
@@ -129,7 +134,7 @@ router.get("/edit-product/:id", isAdmin, function(req, res) {
 //5.) To Get View-Product Products >> View a product-for Admin Views:
 //--------------------------------
 //This route is refering to the "/admin/products/add-product" ..as this part is the root file listed in the app.js file.
-router.get("/view-product/:id", isAdmin, function(req, res) {
+router.get("/view-product/:id", function(req, res) {
 	var id = req.params.id
 
 	Product.findById(id, function(err, product) {
@@ -179,7 +184,7 @@ router.get("/view-product/:id", isAdmin, function(req, res) {
 //6.) To Get Delete-Product Products >> Delete a Product:
 //-------------------------------------------------
 //This route is refering to the "/admin/products/delete-product" ..as this part is the root file listed in the app.js file.
-router.get("/delete-product/:id", isAdmin, function(req, res) {
+router.get("/delete-product/:id", function(req, res) {
 	var id = req.params.id;
 	var path = "public/product_images/" + id;
 
@@ -202,22 +207,25 @@ router.get("/delete-product/:id", isAdmin, function(req, res) {
 
 //7.) To Get Delete gallery-Image Products >> Delete a Product:
 //-------------------------------------------------
+// admin/products/delete-image/pureArchitecture.jpg/?id=5afa4495fc90363f20830412
 //This route is refering to the "/admin/products/delete-image/:image/?id" ..as this part is the root file listed in the app.js file.
-router.get("/delete-image/:image", isAdmin, function(req, res) {
-	var originalImage = "/public/product_images/" + req.query.id + "/gallery/" + req.params.image;
-	var thumbnailImage = "public/product_images/" + req.query._id + "/gallery/thumbnails/" + req.params.image;
+router.get("/delete-image/:image", function(req, res) {
+	var originalSizeImage = "public/product_images/" + req.query.id + "/gallery/" + req.params.image;
+	var thumbnailImage = "public/product_images/" + req.query.id + "/gallery/thumbnails/" + req.params.image;
 
-	fs.remove(originalImage, function(err) {
+	fs.remove(originalSizeImage, function(err) {
 		if(err) {
 			console.log(err);
 		}
 		else {
 			fs.remove(thumbnailImage, function(err) {
-				if (err) return console.log(err);
+				if (err) {
+					console.log(err);
+				}
 				else {
 					req.flash("success", "Gallery image was successfully deleted.");
 					//redirect to url:
-					req.redirect("/admin/products/edit-product/" + req.query.id);
+					res.redirect("/admin/products/edit-product/" + req.query.id);
 				}
 			});
 		}
@@ -450,11 +458,11 @@ router.post("/edit-product/:id", function(req, res) {
 		console.log("You have an error");
 		console.log(errors);
 		req.session.errors = errors;
-		res.redirect("/admin/products/edit-product" + id);
+		res.redirect("/admin/products/edit-product/" + id);
 	}
 	else if (category === "Please Select a Category Below") {
 		req.flash ("danger", "You must choose a Category.");
-		res.redirect("/admin/products/edit-product" + id);
+		res.redirect("/admin/products/edit-product/" + id);
 	}
 	else {
 		console.log("You have submitted your values for the DB.... !!");
@@ -466,7 +474,7 @@ router.post("/edit-product/:id", function(req, res) {
 			else if (product) {
 				//"flash" refers to the express-messages:
 				req.flash ("danger", "This Product Title already exists. Please choose another.");
-				res.redirect("/admin/products/edit-product" + id);
+				res.redirect("/admin/products/edit-product/" + id);
 			}
 			else {
 				console.log("You have entered your values for the DB.... !!");
@@ -506,7 +514,7 @@ router.post("/edit-product/:id", function(req, res) {
 								var oldPath = "public/product_images/" + id + "/" + pImage;
 
 								fs.remove(oldPath, function(err) {
-									console.log("pImage === : ");
+									console.log("pImage = ");
 									console.log(pImage);
 
 									if (err) return console.error(err);

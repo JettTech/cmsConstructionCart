@@ -18,7 +18,7 @@ var Category = require("../models/category");
 //1.) To Get Admin Category Index:
 //----------------------------------------------------------
 //This route is refering to the "/admin/category/" ..as this part is the root file listed in the app.js file.
-router.get("/", isAdmin, function(req, res) {
+router.get("/",  function(req, res) {
 	// res.send("This is the Admin Category Area");
 	Category.find({}, function(err, categories) {
 		if(err) return console.log(err);
@@ -39,7 +39,7 @@ router.get("/test", function(req, res) {
 //3.) To Get Admin Categories >> Add Category:
 //------------------------------------------------------------------
 //This route is refering to the "/admin/categories/add-category" ..as this part is the root file listed in the app.js file.
-router.get("/add-category", isAdmin, function(req, res) {
+router.get("/add-category",  function(req, res) {
 	var title = "";
 
 	res.render("admin/add_category", {
@@ -50,7 +50,7 @@ router.get("/add-category", isAdmin, function(req, res) {
 //4.) To Get Edit-Categories Page >> Edit a Catetory- for Admin Views:
 //-----------------------------------------------------------------------------------
 //This route is refering to the "/admin/categories/add-category" ..as this part is the root file listed in the app.js file.
-router.get("/edit-category/:id", isAdmin, function(req, res) {
+router.get("/edit-category/:id",  function(req, res) {
 	Category.findById(req.params.id, function(err, category) {
 		if(err) {
 			return console.log(err);
@@ -67,7 +67,7 @@ router.get("/edit-category/:id", isAdmin, function(req, res) {
 //4.) To GET the new Category page with deleted item  >> Delete a Category:
 //-----------------------------------------------------------------------------------
 //This route is refering to the "/admin/categories/delete-category" ..as this part is the root file listed in the app.js file.
-router.get("/delete-category/:id",isAdmin, function(req, res) {
+router.get("/delete-category/:id", function(req, res) {
 	//FYI: WE NEVER REDIRECT from the current (default) "/admin/categories category, as we are only updating
 	//the dateabase with the exisitance of a document or not (and thus how maany/what docs ot display
 	//on the current category or not)...

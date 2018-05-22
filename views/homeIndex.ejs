@@ -17,27 +17,14 @@
 	</div> <!-- end of first row/jumbotron area... -->
 
 	<div id="homepage-row" class="row">
-		<div class="col-xs-12 col-sm-3">
-	      <h3 class="text-white">Services</h3>
-	      <br/>
-
-	      <ul class="list-group">
-	        <li class="list-group-item">
-	          <a href="/products">All Services</a>
-	        </li>
-
-	        <% categories.forEach(function(category) { %>
-	        <li class="list-group-item">
-	          <a class="capitalize-text" href="/products/<%= category.slug %>"><%= category.title.replace(/\-+/g, " ") %></a>
-	        </li>
-	        <% }); %>
-	      </ul>
-	  	</div>
-
-		<div class="col-xs-12 col-sm-9">
-			<div class="row justify-content-center">
+		<div class="col-xs-12">
+			<div id="home-content" class="row justify-content-center">
 				<div class="col-xs-12 font-white"><%- content %></div>
 			</div>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
 		</div>
 
 <% include _layouts/footer %>

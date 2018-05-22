@@ -34,7 +34,7 @@
 			<tr>
 				<td class="capitalize-text"><%= product.title.replace(/\-+/g, " ") %></td>
 				<td class="capitalize-text">$<%= parseFloat(product.price).toFixed(2) %></td>
-				<td class="capitalize-text"><%= product.category %></td>
+				<td class="capitalize-text"><%= product.category.replace(/\-+/g, " ") %></td>
 				<td>
 				<% if (product.image === "") { %>
 					<img src="/images/defaultImg.png" alt="Default Profile Image" width="350" height="350">

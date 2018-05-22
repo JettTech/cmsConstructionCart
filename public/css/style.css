@@ -79,6 +79,18 @@ hr {
     background-position: center;
 }
 
+.parallaxImg5 {
+	width: 100%;
+	height: 600px;
+	background: url("../images/heavyMetalShop.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	
+	/*for parallax scrolling effect:*/
+	background-attachment: fixed;
+    background-position: center;
+}
+
 .user-container {
 	background-color: #2d2d37;
 }
@@ -110,9 +122,17 @@ hr {
 	text-align: center;
 }
 
+#home-content {
+	margin: 5px 25px;
+}
+
 #homepage-row {
 	padding: 50px 20px;
 	background: #2d2d37;
+}
+
+.page-content {
+	margin: 5px 25px;
 }
 
 .higherZ {
@@ -166,6 +186,10 @@ li.list-group-item > a {
 	margin: 0 auto;
 }
 
+.cart-area {
+	min-height: 400px;
+}
+
 .ajaxbg {
 	position: absolute;;
 	width: 100%;
@@ -195,6 +219,10 @@ p { /*this is for the content created by thte admin page...*/
 
 .payPal {
 	display: none;
+}
+
+.alignMiddle {
+	margin: 0 auto !important;
 }
 
 table.alignMiddle td {

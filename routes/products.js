@@ -21,7 +21,7 @@ router.get("/", function(req, res) {
             console.log(err);
 
         res.render('all_products', {
-            title: "All Products",
+            title: "All Services",
             products: products
         });
     });

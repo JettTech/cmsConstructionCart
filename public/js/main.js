@@ -18,11 +18,11 @@ $(document).ready(function() {
 		if(!confirm("Are you sure you wish to delete this?")) return false;
 	});
 
-	//Cart Clearing /Deletion confirmation, when on the admin/page Dashboard
-	$(".cart-deletion").on("click", function() {
-		// if this confirm prompt is NOT confirmed, then the the function returns "false", and defualts to contining on to the backend/router (, and thus deleting the page).
-		if(!confirm("Are you sure you wish to clear your cart?")) return false;
-	});
+	// //Cart Clearing /Deletion confirmation, when on the admin/page Dashboard
+	// $(".cart-deletion").on("click", function() {
+	// 	// if this confirm prompt is NOT confirmed, then the the function returns "false", and defualts to contining on to the backend/router (, and thus deleting the page).
+	// 	if(!confirm("Are you sure you wish to clear your cart?")) return false;
+	// });
 
 	if ($("data.fancybox").length) {
 		$("data-fancbox").fancybox();
