@@ -16,7 +16,7 @@ var Product = require("../models/product");
 router.get("/add/:product", function(req, res) {
 	var slug = req.params.product;
 
-	Product.findOne({slug: slug}, function(err, page) {
+	Product.findOne({slug: slug}, function(err, product) {
 		if(err) {
 			console.log(err);
 		}
@@ -34,6 +34,10 @@ router.get("/add/:product", function(req, res) {
 		else {
 			var cart = req.session.cart;
 			var newItem = true;
+
+			console.log("cart.length was : ");
+			console.log(cart.length);
+			
 
 			for (var i=0; i<cart.length; i++) {
 				if (cart[i].title === slug) {
@@ -53,6 +57,9 @@ router.get("/add/:product", function(req, res) {
 		}
 
 		console.log(req.session.cart);
+		console.log("cart.length is : ");
+		console.log(req.session.cart.length);
+
 		req.flash("success", "Product added!");
 		res.redirect("back");
 
@@ -61,7 +68,7 @@ router.get("/add/:product", function(req, res) {
 
 //GET the page for the CART Checkout; ie" "cart/checkout"
 router.get("/checkout", function(req, res) {
-	if(req.session.cart && req.session.cart.length === 0) {
+	if (req.session.cart && req.session.cart.length === 0) {
 		delete req.session.cart;
 		res.redirect("/cart/checkout");
 	}
@@ -108,18 +115,10 @@ router.get("/udpate/:product", function(req, res) {
 	console.log(req.session.cart);
 	req.flash("success", "Cart updated!");
 	res.redirect("/cart/checkout");
-
-
-	res.render("checkout", {
-		title: "Checkout",
-		cart: req.session.cart
-	});
 });
 
 //GET the CLEAR CART page; ie" "cart/clear;"
 router.get("/clear", function(req, res) {
-	var slug = req.params.product;
-
 	delete req.session.cart;
 
 	console.log(req.session.cart);

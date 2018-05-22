@@ -66,16 +66,21 @@
         <% } %>  
         <% }); %>
         </ul>
-        <ul class="text-center text-white navbar-nav navbar-right" style="margin-right: 20px;">
+        <ul class="text-center text-white navbar-nav ml-auto" style="margin-right: 20px;">
           <% if (user && user.admin === 1) { %>
             <li>Hello <%= user.username %> (Admin).</li>
             <li href="/admin/pages">Admin Area</li>
             <li>
               <a href="/cart/checkout">My Cart 
                 <% if (typeof cart !== "undefined") { %>
-                   <% cart.length %> 
-                   <% } else { %>
-                   items: 0
+                  <% var cartTotal = 0; %> 
+                  <% for (i = 0; i < cart.length; i++) { %>
+                    <% var itemTotal = cart[i] * cart[i].qty; %> 
+                    <% cartTotal += itemTotal; %> 
+                  <% } %>  
+                  (<%= cart.length %>)
+                <% } else { %>
+                   (0)
                  <% } %>  
               </a>
             </li>
@@ -86,15 +91,20 @@
             <li>
               <a href="/cart/checkout">My Cart 
                 <% if (typeof cart !== "undefined") { %>
-                   <% cart.length %> 
-                   <% } else { %>
+                  <% var cartTotal = 0; %> 
+                  <% for (i = 0; i < cart.length; i++) { %>
+                    <% var itemTotal = cart[i] * cart[i].qty; %> 
+                    <% cartTotal += itemTotal; %> 
+                  <% } %>  
+                  (<%= cart.length %>)
+                <% } else { %>
                    (0)
                  <% } %>  
               </a>
             </li>
             <li><a href="/users/logout">Log Out</a></li>
           <% } else { %> 
-            <li><a href="/users/register" style="margin-right: 20px;">Register</a></li>
+            <li><a href="/users/register">Register</a></li>
             <li><a href="/users/login">Log in</a></li>
           <% } %> 
         </ul>

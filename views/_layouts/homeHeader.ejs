@@ -71,9 +71,9 @@
             <li>
               <a href="/cart/checkout">My Cart 
                 <% if (typeof cart !== "undefined") { %>
-                   <% cart.length %> 
+                   (<% cart.length %>)
                    <% } else { %>
-                   items: 0
+                   (0)
                  <% } %>  
               </a>
             </li>
@@ -84,7 +84,7 @@
             <li>
               <a href="/cart/checkout">My Cart 
                 <% if (typeof cart !== "undefined") { %>
-                   <% cart.length %> 
+                   (<% cart.length %>) 
                    <% } else { %>
                    (0)
                  <% } %>  
