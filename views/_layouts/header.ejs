@@ -7,7 +7,7 @@
 <!--     <meta name="description" content="" />
     <meta name="author" content=""/> -->
 
-    <title style="text-transform: capitalize;"><%= title.replace(/\-+/g, " ") %></title>
+    <title style="text-transform: capitalize;">CMSCc: <%= title.replace(/\-+/g, " ") %></title>
     <link rel="icon" type="text/css" href="/images/icon.jpg">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -37,7 +37,7 @@
     <div class="ajaxbg">
       <div class="ajaxinner">
         <h3>You are now being redirected to Paypal Checkout...</h3>
-        <img src="/images/ajax-loader.gif" alt=""/>
+        <img src="/images/ajax-loader.gif" alt="AJAX Loader Image"/>
       </div>
     </div>
 
@@ -75,10 +75,10 @@
                 <% if (typeof cart !== "undefined") { %>
                   <% var cartTotal = 0; %> 
                   <% for (i = 0; i < cart.length; i++) { %>
-                    <% var itemTotal = cart[i] * cart[i].qty; %> 
+                    <% var itemTotal = cart[i].qty; %> 
                     <% cartTotal += itemTotal; %> 
                   <% } %>  
-                  (<%= cart.length %>)
+                  (<%= cartTotal %>)
                 <% } else { %>
                    (0)
                  <% } %>  
@@ -93,10 +93,10 @@
                 <% if (typeof cart !== "undefined") { %>
                   <% var cartTotal = 0; %> 
                   <% for (i = 0; i < cart.length; i++) { %>
-                    <% var itemTotal = cart[i] * cart[i].qty; %> 
+                    <% var itemTotal = cart[i].qty; %> 
                     <% cartTotal += itemTotal; %> 
                   <% } %>  
-                  (<%= cart.length %>)
+                  (<%= cartTotal %>)
                 <% } else { %>
                    (0)
                  <% } %>  

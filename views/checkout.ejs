@@ -67,7 +67,7 @@
 					<% }); %>
 					<input type="hidden" name="currency_code" value="USD">
 					<input type="hidden" name="amount" value="<%= total %>">
-					<input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+					<input id="payPal-checkout" type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
 				</form>
 			<% } else { %>
 				<h3 class="text-center">Your cart is empty.</h3>
@@ -77,17 +77,16 @@
 
 <script>
     $(document).ready(function() {
-
-	//Cart Clearing /Deletion confirmation, when on the admin/page Dashboard
-	$(".cart-deletion").on("click", function() {
-		if(!confirm("Are you sure you wish to clear your cart?")) return false;
-	});
+		//Cart Clearing /Deletion confirmation, when on the admin/page Dashboard
+		$(".cart-deletion").on("click", function() {
+			if(!confirm("Are you sure you wish to clear your cart?")) return false;
+		});
     	
-    //"Buy Now "  functionality
-	    $("a.buy-now").on("click", function() { //function(e)
+    	//"Buy Now "  functionality
+	    $(".buy-now").on("click", function() { //function(e)
 	        // e.preventDefault();
 	        $.get("/cart/buynow", function() {
-	            $("form.payPal input[type=image]").click();
+	            $("#payPal-checkout").click();
 	            $(".ajaxbg").show();
 	        });
 	    });

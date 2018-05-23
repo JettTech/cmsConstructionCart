@@ -29,8 +29,8 @@ router.get("/add/:product", function(req, res) {
 		else {
 			var newItem;
 			var cart = req.session.cart;			
-			console.log("cart.length was : ");
-			console.log(cart.length);
+			// console.log("cart.length was : ");
+			// console.log(cart.length);
 			
 			for (var i = 0; i < cart.length; i++) {
 				if (cart[i].title === slug) {
@@ -91,7 +91,7 @@ router.get("/update/:product", function(req, res) {
 					break;
 				case "remove" :
 					cart[i].qty--;
-					if (cart[i].length < 1) {
+					if (cart[i].qty < 1) {
 						cart.splice(i,1);
 					}
 					break;
@@ -117,20 +117,23 @@ router.get("/update/:product", function(req, res) {
 //GET the CLEAR CART page; ie" "cart/clear;"
 router.get("/clear", function(req, res) {
 	delete req.session.cart;
-
 	console.log(req.session.cart);
 	req.flash("success", "Cart cleared!");
 	res.redirect("/cart/checkout");
 });
 
 
-//GET the CLEAR CART page; ie" "cart/clear;"
+//GET the Buy-Now CART page; ie" "cart/buynow;"
 router.get("/buynow", function(req, res) {
-	delete req.session.cart;
-
 	console.log("req.session.cart  = ");
 	console.log(req.session.cart);
-	res.sendStaut(200);
+
+	delete req.session.cart;
+
+	console.log("req.session.cart was deleted... ");
+	console.log("NOW, req.session.cart  = ");
+	console.log(req.session.cart);
+	res.sendStatus(200);
 });
 
 
