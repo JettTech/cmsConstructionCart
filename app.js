@@ -21,18 +21,28 @@ require("./config/passport")(passport);
 var Product = require("./models/product");
 
 
-//Connection to DB:
+//PORT Declaration && Connection to DB:
 //-----------------------
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/cmsConstructionCart";
-// mongoose.connect(config.database); >> fr local host // developement server
+var PORT = process.env.PORT || 3000;
+// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/cmsConstructionCart";
+// // mongoose.connect(config.database); >> fr local host // developement server
+// mongoose.Promise = Promise;
+// mongoose.connect(MONGODB_URI, {useMongoClient: true});
 
-mongoose.Promise	 = Promise;
-mongoose.connect(MONGODB_URI, {useMongoClient: true});
+mongoose.Promise = global.Promise; // Set up promises with mongoose
+mongoose.connect (
+  process.env.MONGODB_URI || "mongodb://localhost/cmsConstructionCart", // !! DB in mongoose, (Robo 3t), should be "mavSquared" !!
+
+  {
+    useMongoClient: true
+  }
+);
+
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function() {
 	console.log("We have a green Light for the data storage. We are now connected to MongoDB.")
-})
+});
 
 
 //Initialize App:
@@ -194,7 +204,6 @@ app.use("/", pages);
 
 //Server Set-Up:
 //--------------------
-var PORT = process.env.PORT || 3000;
 app.listen(PORT, function() {
 	console.log("Hey! We're now on the Localhost Server, PORT #" + PORT + ". Happy creating! :D");
 });
