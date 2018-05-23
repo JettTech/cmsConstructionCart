@@ -15,17 +15,17 @@ var resizeImg = require("resize-img");
 var passport = require("passport");
 require("./config/passport")(passport);
 
-//Local Files to Acess:
+//Local Files to Access:
 //-----------------------
 //Model(ProductSchema) for Product
 var Product = require("./models/product");
 
 //Connection to DB:
 //-----------------------
-mongoose.Promise = Promise;
-
+var MONGODB_URI = process.env.MONGODB_URI || config.database;
 // mongoose.connect(config.database); >> fr local host // developement server
 
+mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {useMongoClient: true});
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
@@ -194,7 +194,7 @@ app.use("/", pages);
 
 //Server Set-Up:
 //--------------------
-var port = process.env.PORT || 3000;
-app.listen(port, function() {
+var PORT = process.env.PORT || 3000;
+app.listen(PORT, function() {
 	console.log("Hey! We're now on the Localhost Server, PORT #" + PORT + ". Happy creating! :D");
 });
