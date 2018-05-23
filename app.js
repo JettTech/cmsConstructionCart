@@ -26,7 +26,7 @@ var Product = require("./models/product");
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/cmsConstructionCart";
 // mongoose.connect(config.database); >> fr local host // developement server
 
-mongoose.Promise = Promise;
+mongoose.Promise	 = Promise;
 mongoose.connect(MONGODB_URI, {useMongoClient: true});
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
