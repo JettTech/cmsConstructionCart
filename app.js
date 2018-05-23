@@ -22,7 +22,11 @@ var Product = require("./models/product");
 
 //Connection to DB:
 //-----------------------
-mongoose.connect(config.database);
+mongoose.Promise = Promise;
+
+// mongoose.connect(config.database); >> fr local host // developement server
+
+mongoose.connect(MONGODB_URI, {useMongoClient: true});
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function() {
@@ -190,7 +194,7 @@ app.use("/", pages);
 
 //Server Set-Up:
 //--------------------
-var PORT = 3300;
-app.listen(PORT,function() {
+var port = process.env.PORT || 3000;
+app.listen(port, function() {
 	console.log("Hey! We're now on the Localhost Server, PORT #" + PORT + ". Happy creating! :D");
 });
