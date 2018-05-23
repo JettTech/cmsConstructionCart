@@ -2,11 +2,6 @@
 //=========================
 var express = require("express");
 var router = express.Router();
-var fs = require("fs-extra");
-// NPM DEPDENCIES
-//=========================
-var express = require("express");
-var router = express.Router();
 
 var Product = require("../models/product");
 
@@ -32,20 +27,22 @@ router.get("/add/:product", function(req, res) {
 			});
 		}
 		else {
-			var cart = req.session.cart;
-			var newItem = true;
-
+			var newItem;
+			var cart = req.session.cart;			
 			console.log("cart.length was : ");
 			console.log(cart.length);
 			
-
-			for (var i=0; i<cart.length; i++) {
+			for (var i = 0; i < cart.length; i++) {
 				if (cart[i].title === slug) {
 					cart[i].qty++;
 					newItem = false;
 					break;
 				}
+				else {
+					newItem = true;
+				}
 			}
+
 			if (newItem) {
 				cart.push({
 					title: slug,
@@ -81,7 +78,7 @@ router.get("/checkout", function(req, res) {
 });
 
 //GET the page for the PRODUCT UPDATE; ie" "cart/updated/:product"
-router.get("/udpate/:product", function(req, res) {
+router.get("/update/:product", function(req, res) {
 	var slug = req.params.product;
 	var cart = req.session.cart;
 	var action = req.query.action;
@@ -94,7 +91,7 @@ router.get("/udpate/:product", function(req, res) {
 					break;
 				case "remove" :
 					cart[i].qty--;
-					if(cart.length < 1) {
+					if (cart[i].length < 1) {
 						cart.splice(i,1);
 					}
 					break;

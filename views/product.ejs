@@ -9,8 +9,9 @@
 
 	<div class="row pages-row justify-content-center">
 		<div class="col-xs-12 col-md-5">
-		  <p><%- product.description %></p>
+		  <h1 class="capitalize-text"><%= product.title.replace(/\-+/g, " ") %></h1>
 		  <hr/>
+		  <p><%- product.description %></p>
 		  <br/>
 		  <br/>
 	      <img src="/product_images/<%= product.id %>/<%= product.image %>" alt="" class="spi">
