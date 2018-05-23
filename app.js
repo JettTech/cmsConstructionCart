@@ -20,18 +20,19 @@ require("./config/passport")(passport);
 //Model(ProductSchema) for Product
 var Product = require("./models/product");
 
-//Connection to DB:
-//-----------------------
-var MONGODB_URI = process.env.MONGODB_URI || config.database;
-// mongoose.connect(config.database); >> fr local host // developement server
 
-mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI, {useMongoClient: true});
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "));
-db.once("open", function() {
-	console.log("We have a green Light for the data storage. We are now connected to MongoDB.")
-})
+// //Connection to DB:
+// //-----------------------
+// var MONGODB_URI = process.env.MONGODB_URI || config.database;
+// // mongoose.connect(config.database); >> fr local host // developement server
+
+// mongoose.Promise = Promise;
+// mongoose.connect(MONGODB_URI, {useMongoClient: true});
+// var db = mongoose.connection;
+// db.on("error", console.error.bind(console, "connection error: "));
+// db.once("open", function() {
+// 	console.log("We have a green Light for the data storage. We are now connected to MongoDB.")
+// })
 
 
 //Initialize App:
@@ -64,6 +65,7 @@ var Page = require("./models/page");
 var Category = require("./models/category");
 var Product = require("./models/product");
 
+
 //Make all (client-side) PAGES pass into Header.ejs (app.locals.pages):
 //---------------------------------------------------------------
 Page.find({}).sort({sorting:1}).exec(function (err, pages) {
@@ -74,6 +76,7 @@ Page.find({}).sort({sorting:1}).exec(function (err, pages) {
 		app.locals.pages = pages;
 	}
 });
+
 
 //Make all (client-side) CATEGORIES pass into Header.ejs (app.locals.pages):
 //---------------------------------------------------------------
@@ -90,7 +93,6 @@ Category.find(function (err, categories) {
 //------------------------------------------------
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
- 
 // parse application/json
 app.use(bodyParser.json());
 
@@ -104,7 +106,6 @@ app.use(session({
 	saveUninitialized: true, 
 	// cookie: { secure: true }
 }));
-
 
 //Express Validator Middleware:
 //-----------------------------------------------
@@ -141,7 +142,6 @@ app.use(expressValidator({
         }
     }
 }));
-
 
 //Express Messages Middleware >> 
 //(This Middleware calls the "require" function
